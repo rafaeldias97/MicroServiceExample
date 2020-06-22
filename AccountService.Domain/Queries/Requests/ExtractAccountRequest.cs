@@ -2,6 +2,6 @@
 {
     public class ExtractAccountRequest
     {
-        public long NumberAccountTo { get; set; }
+        public long NumberAccountFrom { get; set; }
     }
 }

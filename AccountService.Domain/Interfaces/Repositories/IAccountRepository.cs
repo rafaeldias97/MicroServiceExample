@@ -7,6 +7,6 @@ namespace AccountService.Domain.Repositories
     {
         Task<Account> Debit(Account account);
         Task<Account> Credit(Account account);
-        void Commit ();
+        bool Commit();
     }
 }

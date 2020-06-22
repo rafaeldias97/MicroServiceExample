@@ -12,9 +12,11 @@ namespace AccountService.Infra.Data.Repositories
         {
             this.ctx = ctx;
         }
-        public void Commit()
+
+        public bool Commit()
         {
-            ctx.SaveChanges();
+            int success = ctx.SaveChanges();
+            return success > 0;
         }
 
         public Task<Account> Credit(Account account)
