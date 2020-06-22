@@ -4,7 +4,7 @@ using System;
 
 namespace AccountService.Domain.Commands.Requests
 {
-    public class CreditAccountRequest : IRequest<CreditAccountResponse>
+    public class TransferAccountRequest : IRequest<TransferAccountResponse>
     {
         public AccountRequest To { get; set; }
         public AccountRequest From { get; set; }

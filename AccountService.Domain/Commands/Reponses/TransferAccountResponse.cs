@@ -2,8 +2,13 @@
 
 namespace AccountService.Domain.Commands.Reponses
 {
-    public class CreditAccountResponse
+    public class TransferAccountResponse
     {
+        public TransferAccountResponse(Account accountTo, Account accountFrom)
+        {
+            AccountTo = accountTo;
+            AccountFrom = accountFrom;
+        }
         public Account AccountTo { get; set; }
         public Account AccountFrom { get; set; }
 

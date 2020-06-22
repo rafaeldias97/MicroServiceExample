@@ -8,15 +8,15 @@ using MediatR;
 
 namespace AccountService.Domain.Handlers
 {
-    public class CreditAccountHandler : IRequestHandler<CreditAccountRequest, CreditAccountResponse>
+    public class TransferAccountHandler : IRequestHandler<TransferAccountRequest, TransferAccountResponse>
     {
         private readonly IAccountRepository accountRepository;
-        public CreditAccountHandler(IAccountRepository accountRepository)
+        public TransferAccountHandler(IAccountRepository accountRepository)
         {
             this.accountRepository = accountRepository;
         }
-        public Task<CreditAccountResponse> Handle(
-            CreditAccountRequest request,
+        public Task<TransferAccountResponse> Handle(
+            TransferAccountRequest request,
             CancellationToken cancellationToken
             )
         {
@@ -32,7 +32,7 @@ namespace AccountService.Domain.Handlers
             // Realiza Commit
             accountRepository.Commit();
             // Aciona evento para atualizar base nosql
-            var result = new CreditAccountResponse();
+            var result = new TransferAccountResponse(accountTo, accountFrom);
             return Task.FromResult(result);
         }
     }
