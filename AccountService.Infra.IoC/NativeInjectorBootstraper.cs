@@ -12,6 +12,9 @@ using RabbitMQ.EventBus;
 using AccountService.Domain.EventBus;
 using AccountService.Infra.Data.EventBuss;
 using Microsoft.Extensions.Options;
+using System;
+using AccountService.Domain.Handlers;
+using AccountService.Domain.Interfaces.Handlers;
 
 namespace AccountService.Infra.IoC
 {
@@ -19,12 +22,15 @@ namespace AccountService.Infra.IoC
     {
         public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMediatR(Assembly.GetExecutingAssembly());
+            //services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IExtractEventBus, ExtractEventBus>();
             services.AddSingleton(new Config("localhost", 5672, "guest", "guest").Start());
-            services.AddDbContext<MSSQLContext>(x => x.UseSqlServer(@"Server=localhost;Database=dbmodel;User Id=sa;Password=sa@12345;"));
+            services.AddDbContext<MSSQLContext>(x => x.UseSqlServer(@"Server=localhost;Database=AccountService;User Id=sa;Password=sa@12345;"));
+
+
+            services.AddTransient<ITransferAccountHandler, TransferAccountHandler>();
 
             services.AddSingleton<IMongoContext>(new MongoContext { 
                 CollectionName = "Account",

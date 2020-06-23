@@ -4,12 +4,13 @@ using AccountService.Domain.Commands.Reponses;
 using AccountService.Domain.Commands.Requests;
 using AccountService.Domain.Entities;
 using AccountService.Domain.EventBus;
+using AccountService.Domain.Interfaces.Handlers;
 using AccountService.Domain.Repositories;
 using MediatR;
 
 namespace AccountService.Domain.Handlers
 {
-    public class TransferAccountHandler : IRequestHandler<TransferAccountRequest, TransferAccountResponse>
+    public class TransferAccountHandler : ITransferAccountHandler
     {
         private readonly IAccountRepository accountRepository;
         private readonly IExtractEventBus @event;
@@ -19,8 +20,7 @@ namespace AccountService.Domain.Handlers
             this.@event = @event;
         }
         public Task<TransferAccountResponse> Handle(
-            TransferAccountRequest request,
-            CancellationToken cancellationToken
+            TransferAccountRequest request
             )
         {
             var accountTo = new Account(request.To.Number, request.To.DueDate, request.To.SecurityCode);
