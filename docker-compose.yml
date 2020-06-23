@@ -1,8 +1,8 @@
 version: "3"
 services:
-    mssql:
+    mssql-account:
         image: microsoft/mssql-server-linux:latest
-        container_name: db
+        container_name: mssql-account
         restart: "always"
         ports:
           - "1433:1433"
@@ -10,28 +10,26 @@ services:
           - ACCEPT_EULA=Y
           - SA_PASSWORD=sa@12345
 
-    mongodb:
+    mongodb-account:
       image: "mongo:latest"
-      container_name: mongodb
+      container_name: mongodb-account
       ports:
         - "27017:27017"
       restart: always
       volumes:
-        - ./data/db:/data/db
+        - ./.docker/data/db:/data/db
 
-    zookeeper:
-      container_name: zookeeper
-      image: wurstmeister/zookeeper:latest
-      ports:
-        - "2181:2181"
-    kafka:
-      container_name: kafka
-      image: wurstmeister/kafka:2.11-1.1.0
-      ports:
-        - "9092:9092"
-      environment:
-        KAFKA_ADVERTISED_HOST_NAME: localhost
-        KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      #   KAFKA_CREATE_TOPICS: "topic:1:1"
+    rabbitmq:
+      image: rabbitmq:3-management-alpine
+      container_name: rabbitmq
       volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
+          - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
+          - ./.docker/rabbitmq/data/:/var/lib/rabbitmq/
+          - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
+      environment:
+          RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE}
+          RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+          RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+      ports:
+          - 5672:5672
+          - 15672:15672

@@ -12,6 +12,7 @@ obj/
 
 ### VisualStudioCode ###
 .vscode/*
+.docker/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
