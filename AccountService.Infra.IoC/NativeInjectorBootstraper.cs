@@ -8,6 +8,7 @@ using AccountService.Domain.Handlers;
 using RabbitMQ.EventBus.RabbitMQ;
 using RabbitMQ.EventBus.Interfaces;
 using AccountService.Domain.Commands.Requests;
+using Autofac;
 
 namespace AccountService.Infra.IoC
 {
@@ -23,7 +24,14 @@ namespace AccountService.Infra.IoC
             //services.AddSingleton(new Config("localhost", 5672, "guest", "guest").Start());
             var service = new EventBusService();
             service.RegisterHandle<TransferAccountCommandHandler>()
-                .RegisterRepositoryServices<IAccountRepository, AccountRepository>()
+                .RegisterServices(build =>
+                {
+                    build.RegisterType<AccountRepository>().As<IAccountRepository>();
+                    build.RegisterType<MSSQLContext>()
+                        .WithParameter("options", new DbContextOptionsBuilder<MSSQLContext>()
+                        .UseSqlServer(@"Server=localhost;Database=AccountService;User Id=sa;Password=sa@12345;").Options)
+                        .InstancePerLifetimeScope();
+                })
                 .Configure(settings =>
                 {
                     settings.HostName = "localhost";

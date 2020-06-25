@@ -21,14 +21,14 @@ namespace AccountService.Infra.Data.Repositories
 
         public Task<Account> Credit(Account account)
         {
-            var res = ctx.Account.Add(account);
+            var res = ctx?.Account.Add(account);
             return Task.FromResult(res.Entity);
         }
 
         public Task<Account> Debit(Account account)
         {
             account.Number = account.Number * -1;
-            var res = ctx.Account.Add(account);
+            var res = ctx?.Account.Add(account);
             return Task.FromResult(res.Entity);
         }
     }

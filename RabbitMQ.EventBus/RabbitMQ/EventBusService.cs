@@ -47,12 +47,6 @@ namespace RabbitMQ.EventBus.RabbitMQ
             return this;
         }
 
-        public EventBusService RegisterRepositoryServices<TInterface, TClass>()
-        {
-            _builder.RegisterType<TClass>().As<TInterface>();
-            return this;
-        }
-
         /// <summary>
         /// Registra os Handlers de inscrição no EventBus
         /// </summary>

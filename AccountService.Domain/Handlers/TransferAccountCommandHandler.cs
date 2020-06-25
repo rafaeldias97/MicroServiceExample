@@ -33,8 +33,8 @@ namespace AccountService.Domain.Handlers
                 var extractTo = new GenerateExtractRequest(accountTo.CreationDate, $"Transferência realizada para  conta {accountFrom.Number}", accountTo.Value, accountTo.Number, 50);
                 var extractFrom = new GenerateExtractRequest(accountFrom.CreationDate, $"Transferência recebida da conta {accountTo.Number}", accountFrom.Value, accountFrom.Number, 50);
                 // Consistência eventual na base nosql
-                @event.Publish<GenerateExtractRequest>(extractTo);
-                @event.Publish<GenerateExtractRequest>(extractFrom);
+                @event.Publish(extractTo);
+                @event.Publish(extractFrom);
             }
             var result = new TransferAccountResponse(accountTo, accountFrom);
             return Task.FromResult(result);
