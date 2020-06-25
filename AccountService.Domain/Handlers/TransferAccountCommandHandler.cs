@@ -1,27 +1,22 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AccountService.Domain.Commands.Reponses;
 using AccountService.Domain.Commands.Requests;
 using AccountService.Domain.Entities;
-using AccountService.Domain.EventBus;
-using AccountService.Domain.Interfaces.Handlers;
 using AccountService.Domain.Repositories;
-using MediatR;
+using RabbitMQ.EventBus.Interfaces;
 
 namespace AccountService.Domain.Handlers
 {
-    public class TransferAccountHandler : ITransferAccountHandler
+    public class TransferAccountCommandHandler : IEventHandler<TransferAccountRequest>
     {
         private readonly IAccountRepository accountRepository;
-        private readonly IExtractEventBus @event;
-        public TransferAccountHandler(IAccountRepository accountRepository, IExtractEventBus @event)
+        private readonly IEventBus @event;
+        public TransferAccountCommandHandler(IAccountRepository accountRepository, IEventBus @event)
         {
             this.accountRepository = accountRepository;
             this.@event = @event;
         }
-        public Task<TransferAccountResponse> Handle(
-            TransferAccountRequest request
-            )
+        public Task Handle(TransferAccountRequest request)
         {
             var accountTo = new Account(request.To.Number, request.To.DueDate, request.To.SecurityCode);
             var accountFrom = new Account(request.From.Number, request.From.DueDate, request.From.SecurityCode);
@@ -35,8 +30,11 @@ namespace AccountService.Domain.Handlers
             // Realiza Commit
             if (accountRepository.Commit())
             {
+                var extractTo = new GenerateExtractRequest(accountTo.CreationDate, $"Transferência realizada para  conta {accountFrom.Number}", accountTo.Value, accountTo.Number, 50);
+                var extractFrom = new GenerateExtractRequest(accountFrom.CreationDate, $"Transferência recebida da conta {accountTo.Number}", accountFrom.Value, accountFrom.Number, 50);
                 // Consistência eventual na base nosql
-                @event.Publisher(request);
+                @event.Publish<GenerateExtractRequest>(extractTo);
+                @event.Publish<GenerateExtractRequest>(extractFrom);
             }
             var result = new TransferAccountResponse(accountTo, accountFrom);
             return Task.FromResult(result);

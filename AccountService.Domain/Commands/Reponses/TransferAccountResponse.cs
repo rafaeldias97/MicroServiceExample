@@ -1,8 +1,9 @@
 ﻿using AccountService.Domain.Entities;
+using RabbitMQ.EventBus.Interfaces;
 
 namespace AccountService.Domain.Commands.Reponses
 {
-    public class TransferAccountResponse
+    public class TransferAccountResponse : Event
     {
         public TransferAccountResponse(Account accountTo, Account accountFrom)
         {

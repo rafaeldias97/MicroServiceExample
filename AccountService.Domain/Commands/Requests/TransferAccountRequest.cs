@@ -1,10 +1,9 @@
-﻿using AccountService.Domain.Commands.Reponses;
-using MediatR;
+﻿using RabbitMQ.EventBus.Interfaces;
 using System;
 
 namespace AccountService.Domain.Commands.Requests
 {
-    public class TransferAccountRequest
+    public class TransferAccountRequest : Event
     {
         public AccountRequest To { get; set; }
         public AccountRequest From { get; set; }

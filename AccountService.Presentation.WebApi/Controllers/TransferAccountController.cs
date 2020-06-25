@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AccountService.Domain.Commands.Requests;
-using AccountService.Domain.Interfaces.Handlers;
-using MediatR;
-using Microsoft.AspNetCore.Http;
+﻿using AccountService.Domain.Commands.Requests;
 using Microsoft.AspNetCore.Mvc;
+using RabbitMQ.EventBus.Interfaces;
 
 namespace AccountService.Presentation.WebApi.Controllers
 {
@@ -14,10 +8,10 @@ namespace AccountService.Presentation.WebApi.Controllers
     [ApiController]
     public class TransferAccountController : ControllerBase
     {
-        private readonly ITransferAccountHandler command;
-        public TransferAccountController(ITransferAccountHandler command)
+        private readonly IEventBus @event;
+        public TransferAccountController(IEventBus @event)
         {
-            this.command = command;
+            this.@event = @event;
         }
 
         [HttpPost]
@@ -25,8 +19,8 @@ namespace AccountService.Presentation.WebApi.Controllers
             [FromBody] TransferAccountRequest request
             )
         {
-            var res = command.Handle(request);
-            return Ok(res);
+            @event.Publish(request);
+            return Ok(request);
         }
     }
 }

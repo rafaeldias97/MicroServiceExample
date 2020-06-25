@@ -7,4 +7,8 @@
   <ItemGroup>
     <PackageReference Include="MediatR" Version="8.0.1" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RabbitMQ.EventBus\RabbitMQ.EventBus.csproj" />
+  </ItemGroup>
 </Project>
