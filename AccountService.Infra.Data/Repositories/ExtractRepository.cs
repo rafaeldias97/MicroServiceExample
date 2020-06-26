@@ -14,27 +14,22 @@ namespace AccountService.Infra.Data.Repositories
 {
     public class ExtractRepository : IExtractRepository
     {
-        private readonly IMongoCollection<TransferAccountRequest> Extract;
+        private readonly IMongoCollection<Extract> Extract;
         public ExtractRepository(IMongoContext settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
-            Extract = database.GetCollection<TransferAccountRequest>(settings.CollectionName);
+            Extract = database.GetCollection<Extract>(settings.CollectionName);
         }
 
-        public Task<IEnumerable<ExtractAccountResponse>> Get(ExtractAccountRequest account)
+        public async Task<IEnumerable<Extract>> Get(long numberAccount)
         {
-            var res = Extract.Find(extract => extract.From.Number == account.NumberAccountFrom)
-                            .ToList()
-                            .Select(s => new ExtractAccountResponse { 
-                                NumberAccountFrom = s.From.Number,
-                                NumberAccountTo = s.To.Number,
-                            });
-            return Task.FromResult(res);
+            var res = await Extract.FindAsync(x => x.NumberAccount == numberAccount);
+            return res.ToList();
         }
 
-        public void SyncDb(TransferAccountRequest account)
+        public void SyncDb(Extract account)
         {
             Extract.InsertOne(account);
         }

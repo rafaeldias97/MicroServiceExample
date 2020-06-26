@@ -21,7 +21,12 @@ namespace AccountService.Infra.IoC
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddDbContext<MSSQLContext>(x => x.UseSqlServer(@"Server=localhost;Database=AccountService;User Id=sa;Password=sa@12345;"));
 
-            //services.AddSingleton(new Config("localhost", 5672, "guest", "guest").Start());
+            var mongoContext = new MongoContext
+            {
+                CollectionName = "Account",
+                ConnectionString = "mongodb://localhost:27017",
+                DatabaseName = "AccountDb"
+            };
             var service = new EventBusService();
             service.RegisterHandle<TransferAccountCommandHandler>()
                 .RegisterServices(build =>
@@ -32,6 +37,11 @@ namespace AccountService.Infra.IoC
                         .UseSqlServer(@"Server=localhost;Database=AccountService;User Id=sa;Password=sa@12345;").Options)
                         .InstancePerLifetimeScope();
                 })
+                .RegisterHandle<GenerateExtractCommandHandler>()
+                .RegisterServices(build => {
+                    build.RegisterType<ExtractRepository>().As<IExtractRepository>();
+                    build.Register(c => mongoContext).As<IMongoContext>();
+                })
                 .Configure(settings =>
                 {
                     settings.HostName = "localhost";
@@ -39,15 +49,13 @@ namespace AccountService.Infra.IoC
                     settings.UserName = "guest";
                     settings.Password = "guest";
                 });
+
             IEventBus bus = service.EventBus;
             services.AddSingleton<IEventBus>(bus);
             bus.Subscribe<TransferAccountRequest, TransferAccountCommandHandler>();
+            bus.Subscribe<GenerateExtractRequest, GenerateExtractCommandHandler>();
 
-            services.AddSingleton<IMongoContext>(new MongoContext { 
-                CollectionName = "Account",
-                ConnectionString = "mongodb://localhost:27017",
-                DatabaseName = "AccountDb"
-            });
+            services.AddSingleton<IMongoContext>(mongoContext);
 
         }
     }
