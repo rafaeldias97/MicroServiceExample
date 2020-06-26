@@ -9,6 +9,7 @@ using RabbitMQ.EventBus.RabbitMQ;
 using RabbitMQ.EventBus.Interfaces;
 using AccountService.Domain.Commands.Requests;
 using Autofac;
+using AccountService.Domain.Interfaces.Handlers;
 
 namespace AccountService.Infra.IoC
 {
@@ -19,6 +20,9 @@ namespace AccountService.Infra.IoC
             //services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IExtractRepository, ExtractRepository>();
+
+            services.AddScoped<IGetExtractQueryHandler, GetExtractQueryHandler>();
             services.AddDbContext<MSSQLContext>(x => x.UseSqlServer(@"Server=localhost;Database=AccountService;User Id=sa;Password=sa@12345;"));
 
             var mongoContext = new MongoContext
