@@ -16,18 +16,18 @@ O exemplo será aplicado em cima de um contexto de sistema bancário especificam
 - extrato
 - pagamento 
 
+![](https://raw.githubusercontent.com/rafaeldias97/MicroServiceExample/master/files/dbtradicional.png)
+
 Será implementadas apenas as transações de **transferência** e **extrato**.
-Em um modelo tradicional seria criado uma base de dados com uma tabela chamada Saldo como é ilustrado abaixo.
-
-![](https://raw.githubusercontent.com/rafaeldias97/MicroServiceExample/master/files/tradicional.png)
-
-Nota-se que neste cenario serão realizadas varias transações no banco de dados, devido a grande quantidade de demandas, naturalmente vem a necessidade de escalar o serviço de sistema de conta, porém, os recursos do banco de dados se tornariam concorrentes trazendo travamentos, lentidões e deadlocks.
+Em um modelo tradicional seria criado uma base de dados com uma tabela chamada Saldo como é ilustrado acima.
 
 ![](https://raw.githubusercontent.com/rafaeldias97/MicroServiceExample/master/files/dbfailed.png)
 
+Nota-se que neste cenario serão realizadas varias transações no banco de dados, devido a grande quantidade de demandas, naturalmente vem a necessidade de escalar o serviço de sistema de conta, porém, os recursos do banco de dados se tornariam concorrentes trazendo travamentos, lentidões e deadlocks.
+
 A primeira solução que iria vir, seria escalar verticalmente, adicionando mais recursos no seu servidor, contudo seria uma solução um pouco mais custosa.
 
------------- imagem escalar banco verticalmente custo ---------------
+![](https://raw.githubusercontent.com/rafaeldias97/MicroServiceExample/master/files/price.png)
 
 ## CQRS - command query responsibility segregation
 
