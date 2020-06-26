@@ -27,7 +27,7 @@ namespace AccountService.Infra.Data.Repositories
 
         public Task<Account> Debit(Account account)
         {
-            account.Number = account.Number * -1;
+            account.Value = account.Value * -1;
             var res = ctx?.Account.Add(account);
             return Task.FromResult(res.Entity);
         }
