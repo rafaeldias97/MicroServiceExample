@@ -39,6 +39,30 @@ Com isto, chegamos a estrutura do **CQRS (command query responsibility segregati
 ![](https://raw.githubusercontent.com/rafaeldias97/MicroServiceExample/master/files/modelproject.png)
 
 Para o modelo que estará sendo ilustrando, será utilizado dois bancos de dados. O banco de dados de escrita e outro para leitura. Lembrando que o CQRS deve ser utilizado apenas em sistemas onde a **concorrência é alta** e contenha **altas requisições de leitura e escrita em uma mesma base de dados**, caso contrário o aumento da complexidade de codigo seria desnecessário visto que, não haverá ganhos significativos na performace.
+Existem quatro maneiras de sincronizar o banco de dados Desnormalizado com o banco de dados normalizado, sendo elas: 
+1. Atualização Automatica
+2. Atualização Eventual
+3. Atualização Controlada
+4. Atualização por demanda
+
+#### 1. Atualização Automatica
+A atualização automática é disparada de forma sincrona, então no momento que é feita a requisição o evento de commit é realizado
+#### 2. Atualização Eventual
+Sendo a melhor maneira de se implementar CQRS a atualização eventual ocorre de forma assincrona, geralmente é utilizado servicos de fila como RabbitMQ e Apache Kafka proporcionando a **concistencia eventual** para a base desnormalizada.
+#### 3. Atualização por Controlada
+Uma espécia de JOB é executado, assim, é disparado um evento para a sincronização perioticamente.
+#### 4. Atualização por Demanda
+A cada consulta é realizada uma verificação da consistencia entre as bases, caso esteja desatualizada, é realizado a consistencia de atualização.
+
+Como foi explanado acima, a Atualização Eventual é a melhor maneira de se utilizar CQRS, porém, como a concistencia é eventual, pode ser que os dados de consulta ainda estejam desatualizados, mas com algumas técnicas de front-end será possivel apresentar dados atualizados ao usuario, todavia esses dados não estarão atualizados no banco.
+
+## DDD - Domain Driven Design
+Antes de iniciar a implementação, vamos entender um pouco sobre Domain Driven Design que significa **Projeto Orientado a Dominio** em que foi apresentado por Eric Evans. O Domain driven design tem conhecimentos de resolução de problemas a mais de 20 anos.
+Com o DDD dominio de negócio deve ser isolado, assim como outras partes do sistema, só pra deixar claro, o DDD não é uma arquitetura e sim um paradigma que permite com que voce implemente para determinada arquitetura.
+Com o aumento da complexidade de código utilizando o CQRS, o DDD se torna muito util quando implementado em conjunto, é muito importante  que o time tenha conhecimento em DDD.
+Com o DDD, voce torna o seu codigo legivel, escalável, testável e de facil manutenção, a seguir, será apresentado o modelo em cima do DDD que será utilizado para o projeto.
+
+![](https://raw.githubusercontent.com/rafaeldias97/MicroServiceExample/master/files/DDDandCQRS.png)
 
 
 ---##Aumento da complexidade na implementação, é muito importante em uma equipe o conhecimento de DDD (Domain Driven Design), logo não devo utilizar CQRS em todos os cenários ##----
