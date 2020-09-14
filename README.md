@@ -66,9 +66,9 @@ Com o DDD, voce torna o seu codigo legivel, escalável, testável e de facil man
 Então como pode ser observado, separamos a arquitetura em formato de camadas. Para melhor visualização, cada camada será apresentada junto com a implementação no tópico a seguir.
 
 ## 5. Implementação
-Os exemplos que serão utilizados para a implementação serão utilizados em cima da linguagem C# e DotNet Core 3.1. Serão apresentados apenas alguns exemplos, para melhor entendimento o repositorio do projeto está no [Github](https://github.com/rafaeldias97/MicroServiceExample).
+Serão apresentados apenas alguns exemplos, para melhor entendimento o repositorio do projeto está no [Github](https://github.com/rafaeldias97/MicroServiceExample).
 #### 5.1 Camada de dominio
-Vai ser apresentada apenas a camada de dominio, as outras camadas será abordada em outro artigo. A camada de Dominio é o centro da sua aplicação, todas as outras camadas irão conhecer o dominio, porém o dominio não conhecerá as outras camadas, é onde toda a estrutura da sua regra de negócio e algumas implementações do CQRS serão realizadas.
+A camada de Dominio é o centro da sua aplicação, todas as outras camadas irão conhecer o dominio, porém o dominio não conhecerá as outras camadas, é onde toda a estrutura da sua regra de negócio e algumas implementações do CQRS serão realizadas.
 
 ##### 5.1.1 Para realizar uma transferencia
 
@@ -103,7 +103,7 @@ public Task Handle(TransferAccountRequest request)
 ```
 *Handlers > TransferAccountCommandHandler.cs*
 
-Com o DDD, as classes de dominios ficam autoexplicativas como a TransferAccountCommandHandler. Apos ser realizado toda a regra para realizar uma transferencia, caso seja realizada com sucesso, persistir na base de commands, e disparado um evento para gerar o extrato na base desnormalizada.
+Com o DDD, as classes de dominios ficam autoexplicativas como a TransferAccountCommandHandler. Apos ser realizado toda a regra para realizar uma transferencia e caso seja realizada com sucesso, sera persistido na base normalizada e disparado um evento para gerar o extrato na base desnormalizada.
 
 ```csharp
 if (accountRepository.Commit())
@@ -117,7 +117,7 @@ if (accountRepository.Commit())
 ```
 *Handlers > TransferAccountCommandHandler.cs*
 
-Como o command GenerateExtractRequest (Commands > Request > GenerateExtractRequest.cs), sera disparado o Handler (Handlers > GenerateExtractCommandHandler.cs)
+Coma chamada para o evento command GenerateExtractRequest (Commands > Request > GenerateExtractRequest.cs), sera disparado o Handler (Handlers > GenerateExtractCommandHandler.cs)
 
 ```csharp
  public Task Handle(GenerateExtractRequest request)
@@ -130,4 +130,5 @@ Como o command GenerateExtractRequest (Commands > Request > GenerateExtractReque
 *Handlers > GenerateExtractCommandHandler.cs*
 
 O GenerateExtractCommandHandler vai persistir na base desnormalizada feita em mongodb, e assim sera finalizado a transferencia de conta. Caso o cliente realize uma consulta de extrato, nao sera nescessario fazer consultas complexas para trazer o extrato, ja que foi persistido da mesma maneira que sera apresentado, alem de nao concorrer com as transacoes que estao sendo realizadas no banco normalizado.
+O exemplo de query de extrato nao sera apresentado, visto que nao havera certo grau de complexidade como nos commands, pelo simples fato de ser sincrono, basicamente seria uma consulta simples no banco de dados desnormalizado.
 
