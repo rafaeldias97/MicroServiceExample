@@ -33,7 +33,7 @@ A primeira solução que iria vir, seria escalar verticalmente, adicionando mais
 ![](https://raw.githubusercontent.com/rafaeldias97/MicroServiceExample/master/files/dbMasterSlave.png)
 
 Então, se pensarmos como arquitetos e tirarmos um pouco da responsabilidade da infra, poderemos criar algo como um banco de dados master/slave.
-Chegamos a estrutura do **CQRS (command query responsibility segregation)** do português **(Separação entre comando e consulta)**. O CQRS é um padrão de arquitetura em que como o nome é autoexplicativo onde consiste na separação de **leitura/commands** e **escrita/query**. Não é necessário o uso de dois bancos de dados porém, para ter o máximo de desempenho é ideal ter pelo menos duas bases, dependendo do caso, uma para leitura e outra para escrita, porém, existem varias formas de implementar o CQRS.
+Chegamos a estrutura do **CQRS (command query responsibility segregation)** do português **(Separação entre comando e consulta)**. O CQRS é um padrão de arquitetura em que como o nome é autoexplicativo onde consiste na separação de **leitura/query** e **escrita/commands**. Não é necessário o uso de dois bancos de dados porém, para ter o máximo de desempenho é ideal ter pelo menos duas bases, dependendo do caso, uma para leitura e outra para escrita, mas existem varias formas de implementar o CQRS.
 
 ![](https://raw.githubusercontent.com/rafaeldias97/MicroServiceExample/master/files/modelproject.png)
 
