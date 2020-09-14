@@ -1,6 +1,5 @@
+![](https://static.gunnarpeipman.com/wp-content/uploads/2019/12/dotnet-core-featured.png.webp)
 # Iniciando com CQRS e EventSourcing
-
-Para este artigo, estará sendo apresentado exemplos em C# utilizando Dotnet Core 3.1
 
 ## 1. Introdução
 
@@ -72,4 +71,6 @@ Os exemplos que serão utilizados para a implementação serão utilizados em ci
 Vai ser apresentada apenas a camada de dominio, as outras camadas será abordada em outro artigo. A camada de Dominio é o centro da sua aplicação, todas as outras camadas irão conhecer o dominio, porém o dominio não conhecerá as outras camadas, é onde toda a estrutura da sua regra de negócio e algumas implementações do CQRS serão realizadas.
 
 ##### 5.1.1 Pastas de Dominio
+
+![](https://raw.githubusercontent.com/rafaeldias97/MicroServiceExample/master/files/folders.PNG)
 
